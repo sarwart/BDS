@@ -55,28 +55,22 @@ end
 count=0;
 block_loc=zeros(blocks_per_x*blocks_per_y*blocks_per_z,3);
 
-for i=1:blocks_per_z
- for j=1:blocks_per_y
-  for k=1:blocks_per_x
-    count=count+1;
-    block_loc(count,1)=k; block_loc(count,2)=j; block_loc(count,3)=i;   
-   end
- end
+for i=1:(blocks_per_z*blocks_per_y*blocks_per_x)
+    [block_loc(i,1),block_loc(count,2),block_loc(count,3)]=ind2sub([blocks_per_x,blocks_per_y,blocks_per_z],i);   
 end
 
 %creating look-up table unit for connections to unit vector mapping 
 vx=zeros(nodes,nodes);
 vy=zeros(nodes,nodes);
 vz=zeros(nodes,nodes);
-for i=1:nodes
-  for j=1:nodes
+for l=1:nodes*nodes
+    [i,j]=ind2sub([nodes,nodes],l);
       if i~=j
          v=cal_orientation_3d(i,j,atlas);
-         vx(i,j)=v(1); vy(i,j)=v(2); vz(i,j)=v(3);
+         vx(i,j)=-v(1); vy(i,j)=-v(2); vz(i,j)=v(3);
       else
          vx(i,j)=0; vy(i,j)=0; vz(i,j)=0;
       end
-  end
 end
 
 time=toc;
