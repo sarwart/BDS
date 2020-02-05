@@ -31,7 +31,7 @@ elseif strcmp(method,'prob')
 end
 
 %covert blocks to streamlines
-streamlines=blocks_to_streamlines(atlas_base,connec_chains,vox,'.trk');
+streamlines=blocks_to_streamlines(atlas_base,block_chains,vox,'.trk');
 
 
 %to save tck file
