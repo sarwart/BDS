@@ -4,8 +4,8 @@ We are delighted to provide the neuroscience community with a new Block Decompos
 
 The rest of this document is sectioned according to folders and scripts in this repository.
 
-[Data](https://github.com/sarwart/BDS/tree/master/Data): The folder contains a sample 2d phantom for testing the algorithm.
-- nii (2d dMRI data)
+[Data](https://github.com/sarwart/BDS/tree/master/Data): The folder contains a sample phantom for testing the algorithm.
+- nii (dMRI data)
 - nii (white-matter mask for ground.nii.gz)
 - txt (diffusion-weight gradients and b-value used for simulating ground.nii)
 - tck (5000 streamlines generated for ground.nii using [Deterministic CSD](https://mrtrix.readthedocs.io/en/latest/reference/commands/tckgen.html) with default parameters. The minimum and maximum streamline length for the generated streamlines was 10 and 50 mm respectively)
