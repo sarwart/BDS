@@ -21,7 +21,7 @@ When mapping the streamlines to block, the 3d coordinate locations of the block 
 
 ![alt text](https://github.com/sarwart/BDS/blob/master/Data/mapping_process.png)
 
-Auxiliary functions are stored in the [strm\_to\_block ](https://github.com/sarwart/BDS/tree/master/Tck_to_block)folder. This folder should be added to your MATLAB path.
+Auxiliary functions are stored in the [strm\_to\_block ](https://github.com/sarwart/BDS/tree/master/strm_to_block)folder. This folder should be added to your MATLAB path.
 
 [**demo\_BDS.m**](https://github.com/sarwart/BDS/blob/master/demo_BDS.m)[ ](https://github.com/sarwart/BDS/blob/master/demo_BDS.m)provides a demonstration of the BDS algorithm (both deterministic and probabilistic variants). It requires two input files: block-image generated using the process demonstrated in the above figure and the cortical parcellation.
 
