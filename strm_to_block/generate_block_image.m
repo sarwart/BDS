@@ -123,13 +123,7 @@ parfor total=1:x_cord
     
     %update progress
     send(q, total);
-    %{
-    check=(total==final);
-    if length(find(check)) >0
-        disp(['Voxels traversed: ' num2str(percent(find(check))*100) ' %']);
-    end
-    %}
-
+    
 end % for x_cord (total number of voxels in a dMRI data)
 
 delete(p)
