@@ -114,13 +114,14 @@ parfor total=1:x_cord
                       conn(snode,enode)=1; conn(enode,snode)=1;
                   end
             end
-        end
-    end%number of tracks
+        end%number of tracks
     
     %extract the upper-traiangle of the connectivity matrix
     conn=conn(find(conn_mask));
     output(total,:)=sparse(conn');
     
+    end
+      
     %update progress
     send(q, total);
     
