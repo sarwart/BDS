@@ -19,6 +19,8 @@ This script generates a block-image .mat file for a dMRI with dimension X x Y x 
 
 When mapping the streamlines to block, the 3d coordinate locations of the block are converted into linear indices. The simple case of generating block-image using 2d block (NN) is demonstrated in the figure below. The same methodology is followed for converting subscripts to linear indices in MATLAB ([sub2ind](https://au.mathworks.com/help/matlab/ref/sub2ind.html?fbclid=IwAR09PjMw2w6HfAe2pVSdbW56wcrd_dQ3OmkV6DxBMDaNPZuNZ6HGFcZ35Qs))
 
+**P.S.** Many streamlines connect the same pair of regions in a block. So for computational efficiency, a tractogram with million numbers of streamlines are not recommended for generating a block-image.
+
 ![alt text](https://github.com/sarwart/BDS/blob/master/Data/mapping_process.png)
 
 Auxiliary functions are stored in the [strm\_to\_block ](https://github.com/sarwart/BDS/tree/master/strm_to_block)folder. This folder should be added to your MATLAB path.
