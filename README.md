@@ -27,5 +27,5 @@ Auxiliary functions are stored in the [strm\_to\_block ](https://github.com/sarw
 
 Auxiliary functions are stored in the [BDS](https://github.com/sarwart/BDS/tree/master/BDS) folder. This folder should be added to your MATLAB path.
 
-**P.S.** Many streamlines connect the same pair of regions in a block. So for computational efficiency, a tractogram with millions of streamline are not recommended for generating a block-image.
+**Note:** Many streamlines connect the same pair of regions in a block. So for computational efficiency, a tractogram with millions of streamline are not recommended for generating a block-image.
 In Demo_BI.m, the input streamlines are normalized i.e. streamlines are divided by voxel size. This is done to ensure that the 'mm' streamlines maps to the dMRI spatial domain. If the input tractogram/streamlines are already normalized, then change the voxel size to 1 in the demo_BI.m (info.info.PixelDimensions(1)=1) 
