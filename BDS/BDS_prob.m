@@ -1,4 +1,4 @@
-function [conn,track,final_chains]=BDS_prob(atlas_base,conn_map,stride_size,seeding,theta_thresh)
+function [conn,track,final_chains]=BDS_prob(atlas_base,conn_map,stride_size,seeding,theta_thresh,N_core)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%This function is used for mapping connectome using  probabilistic BDS
@@ -20,6 +20,9 @@ function [conn,track,final_chains]=BDS_prob(atlas_base,conn_map,stride_size,seed
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 try
+%creating parallel pool cluster
+p = parpool(N_core);
+    
 %generate lookup tables
 [conn_lookup,block_loc]=initilization_variables(atlas_base);
 
@@ -30,6 +33,7 @@ atlas=create_block_atlas_3d(block_size); %create block-level atlas
 nodes=max(max(max(atlas)));
 index_table=find(triu(ones(nodes,nodes)));
 block_threshold=3; %block_chains should have more than the specified blocks
+track = cell(1,length(dir));
 
 %look up table for nodes
 for i=1:nodes
@@ -43,19 +47,24 @@ blocks_per_z=size(atlas_base,3)-block_size+1;
 
 %output file
 final_chains=[];
+conn=zeros(max(max(max(atlas_base))),max(max(max(atlas_base)))); % connectivity matrix
 
 tic
 percent=[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1];
 final=floor(length(dir).*percent);
-frst=0; total=0;
 
 
-  for i=1:length(dir)
-       check=(i==final);
-    if length(find(check)) >0
-        disp(['Connections traversed: ' num2str(percent(find(check))*100) ' %']);
-    end
-    
+%%BDS algorithm
+disp('Starting BDS algorithm......');
+
+% Initialized the queue
+q = parallel.pool.DataQueue;
+% After receiving new data, update_progress() will be called
+afterEach(q, @update_progress);
+n_completed = 0;
+
+parfor i=1:length(dir)
+      
     
     %indexes of block and connnectivity within a block
     conn_index=index_table(connec_table(i));
@@ -219,29 +228,24 @@ frst=0; total=0;
         end
     end
     
+    track{i}=st;
     
-    if length(st)>block_threshold
-    total=total+1;
-    track{total}=st;
-   
-    
-    end
+    %end
     end%if for seeding from nodes block only
     
-  end
-
+    %update progress
+    send(q, i);
+    
+end
+delete(p)
 time=toc;
 disp(['Block-chains Generated : ' num2str(time) ' sec.']);
 
 tic
-%output file
-final_chains=[];
-conn=zeros(max(max(max(atlas_base))),max(max(max(atlas_base)))); % connectivity matrix
-
 total=0;
-
+del_ind=zeros(size(track));
 for i=1:length(track)
-    
+ if length(track{i})>block_threshold   
     %start & end block
     start=track{i}(1);
     stop=track{i}(end);
@@ -268,11 +272,30 @@ for i=1:length(track)
 		final_chains{total}=track{i};
    end
     clear nz1; clear nz2;
-
+ else
+     del_ind(i)=1;
+ end
 end
 time=toc;
+track(logical(del_ind))=[];
 disp(['Connectome mapping completed : ' num2str(time) ' sec.']);
 catch
-    disp('Error in Prob BDS: Check input files');
+    disp('Error in Det BDS: Check input files');
+     poolobj = gcp('nocreate');
+    
+    if ~isempty(poolobj)
+        delete(poolobj);
+    end
+end
+
+function update_progress(~)
+    n_completed = n_completed + 1;
+    check=(n_completed==final);
+    if length(find(check)) >0
+        disp(strcat('Connections traversed:', num2str(round(n_completed/length(dir)*100)),'%'));
+    end
+    
+end
+
 end
 

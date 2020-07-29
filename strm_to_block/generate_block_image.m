@@ -138,6 +138,7 @@ catch
     end
     
 end
+
 function update_progress(~)
     n_completed = n_completed + 1;
     check=(n_completed==final);
