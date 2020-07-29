@@ -13,7 +13,7 @@ atlas=create_block_atlas_3d(N);
 %Number of nodes
 nR=max(max(max(atlas)));
 %number of cores
-N_core=2;
+N_core=4;
 
 %%%%%%%%%%%dMRI signal and its corresponding track file%%%%%%%%%%%%%%%%
 disp('Loading dataset...');
@@ -21,13 +21,11 @@ tic
 
 %provide respective dMRI data or atlas for dimension extraction,
 %which was also used for extracting raw dMRI blocks for training CNN
-dmri_file=strcat(pwd,'\data\ground.nii.gz');
+dmri_file=strcat(pwd,'\Data\ground.nii.gz');
 info = niftiinfo(dmri_file);
-info.PixelDimensions(1)=1;
-
 toc
 %provide tck file path
-track_file=strcat(pwd,'\data\ground.tck');
+track_file=strcat(pwd,'\Data\ground.tck');
 
 
 %for tck file
